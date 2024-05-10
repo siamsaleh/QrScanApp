@@ -32,5 +32,28 @@ class ApiHelper {
 
 
         }
+
+        fun addScanData(
+            scanModel: ScanModel,
+            apiFetchListener: ApiFetchListener<String>
+        ){
+            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+
+            apiService.addScanData(scanModel).enqueue(object : Callback<String>{
+                override fun onResponse(
+                    call: Call<String>,
+                    response: Response<String>
+                ) {
+                    if (response.isSuccessful) {
+                        response.body()?.let { apiFetchListener.onSuccess(it) }
+                    } else
+                        apiFetchListener.onError(response.message(), response.code())
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    t.message?.let { apiFetchListener.onError(it, 0) }
+                }
+            })
+        }
     }
 }

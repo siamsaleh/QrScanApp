@@ -8,17 +8,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import android.Manifest
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import com.best.qrscanapi.R
 import com.best.qrscanapi.databinding.ActivityMainBinding
 import com.best.qrscanapi.model.retrofit.ScanModel
+import com.best.qrscanapi.utils.Values.Companion.CAMERA_PERMISSION_REQUEST_CODE
 import com.best.qrscanapi.viewmodel.MainViewModel
 import com.journeyapps.barcodescanner.BarcodeResult
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,8 +37,8 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContentView(binding.root)
 
-        loadLiveData()
-        observeLiveData()
+        /*loadLiveData()
+        observeLiveData()*/
 
         binding.scanButton.setOnClickListener {
             toggleScannerVisibility()
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadLiveData() {
+    /*private fun loadLiveData() {
         viewModel.loadScanList()
     }
 
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             scanList = it
             Log.d("BARCODE", "observeLiveData: ${scanList[0].qrCode}")
         }
-    }
+    }*/
 
     private var barcodeCallback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
@@ -75,9 +78,16 @@ class MainActivity : AppCompatActivity() {
         val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setTitle("Scanned Code")
         alertDialogBuilder.setMessage(scannedCode)
-        alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
+        alertDialogBuilder.setPositiveButton("UPLOAD SERVER") { dialog, which ->
+
+            //TODO - Upload the scan code
+            uploadScanData(scannedCode)
+
             // Resume scanning when dialog is dismissed
             binding.barcodeScanner.resume()
+        }
+        alertDialogBuilder.setNegativeButton("CANCEL"){ dialog, which ->
+            dialog.dismiss()
         }
         alertDialogBuilder.setOnDismissListener {
             // Resume scanning when dialog is dismissed
@@ -85,6 +95,12 @@ class MainActivity : AppCompatActivity() {
         }
         val alertDialog: AlertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    private fun uploadScanData(scannedCode: String) {
+        val scanData = ScanModel(scannedCode, generateRandomId(), getCurrentTime(), "QR")
+
+        viewModel.addScanData(scanData, this)
     }
 
     private fun toggleScannerVisibility() {
@@ -116,6 +132,25 @@ class MainActivity : AppCompatActivity() {
         binding.barcodeScanner.pause()
     }
 
+    fun getCurrentTime(): String {
+        val currentTime = System.currentTimeMillis()
+        val dateFormat = SimpleDateFormat("hh:mm a, dd MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(Date(currentTime))
+    }
+
+    private fun generateRandomId(): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        val random = Random()
+        val sb = StringBuilder(6)
+
+        for (i in 0 until 6) {
+            val index = random.nextInt(chars.length)
+            sb.append(chars[index])
+        }
+
+        return sb.toString()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
@@ -124,9 +159,5 @@ class MainActivity : AppCompatActivity() {
                 binding.barcodeScanner.decodeSingle(barcodeCallback)
             }
         }
-    }
-
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
     }
 }

@@ -7,7 +7,8 @@ object ApiClient {
 
     private var retrofit: Retrofit? = null
 
-    private const val BASE_URL = "http://localhost:3000/"
+    /*private const val BASE_URL = "http://localhost:3000/"*/
+    private const val BASE_URL = "https://qrscanserver.onrender.com/"
 
     private val retrofitInstance: Retrofit by lazy {
         Retrofit.Builder()
