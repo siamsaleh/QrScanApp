@@ -1,7 +1,10 @@
-Apk Link - https://drive.google.com/drive/folders/1jIcC4aYfUY73idy8hEVGjfyqv4SLihqv?usp=sharing
+Apk Link - https://drive.google.com/drive/folders/1jIcC4aYfUY73idy8hEVGjfyqv4SLihqv?usp=sharing  <br /><br />
+API Documentation - https://documenter.getpostman.com/view/24445830/2sA3JM71sM <br /><br />
 NodeJs Server Github Link - https://github.com/siamsaleh/QrScanServer
 
-\n
+<br />
+<br />
+<br />
 
 ![WhatsApp Image 2024-05-10 at 5 00 54 PM](https://github.com/siamsaleh/QrScanApp/assets/55757774/f86ea9a7-e346-4408-b261-db76bbf56577)
 
