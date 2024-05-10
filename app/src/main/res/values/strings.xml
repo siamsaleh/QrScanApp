@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">QrScanApi</string>
+    <string name="show_scanned_list_text">Show Scanned List</string>
+    <string name="scan_code_text">Scan Code</string>
 </resources>
