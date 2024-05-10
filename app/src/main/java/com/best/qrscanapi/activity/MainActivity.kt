@@ -13,22 +13,29 @@ import android.Manifest
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import com.best.qrscanapi.R
 import com.best.qrscanapi.databinding.ActivityMainBinding
+import com.best.qrscanapi.model.retrofit.ScanModel
+import com.best.qrscanapi.viewmodel.MainViewModel
 import com.journeyapps.barcodescanner.BarcodeResult
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    /*private lateinit var barcodeView: DecoratedBarcodeView*/
+    private lateinit var viewModel: MainViewModel
+
+    private lateinit var scanList: List<ScanModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
-        /*barcodeView = findViewById(R.id.barcode_scanner)*/
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        setContentView(binding.root)
+
+        loadLiveData()
+        observeLiveData()
 
         binding.scanButton.setOnClickListener {
             toggleScannerVisibility()
@@ -37,8 +44,17 @@ class MainActivity : AppCompatActivity() {
         binding.scannedListButton.setOnClickListener{
             startActivity(Intent(this, ScannedListActivity::class.java))
         }
+    }
 
+    private fun loadLiveData() {
+        viewModel.loadScanList()
+    }
 
+    private fun observeLiveData() {
+        viewModel.getScanList().observe(this){
+            scanList = it
+            Log.d("BARCODE", "observeLiveData: ${scanList[0].qrCode}")
+        }
     }
 
     private var barcodeCallback: BarcodeCallback = object : BarcodeCallback {
@@ -104,8 +120,8 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                barcodeView.resume()
-                barcodeView.decodeSingle(barcodeCallback)
+                binding.barcodeScanner.resume()
+                binding.barcodeScanner.decodeSingle(barcodeCallback)
             }
         }
     }
