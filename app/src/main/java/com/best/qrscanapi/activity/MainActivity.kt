@@ -29,16 +29,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
-    private lateinit var scanList: List<ScanModel>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContentView(binding.root)
-
-        /*loadLiveData()
-        observeLiveData()*/
 
         binding.scanButton.setOnClickListener {
             toggleScannerVisibility()
@@ -48,17 +43,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ScannedListActivity::class.java))
         }
     }
-
-    /*private fun loadLiveData() {
-        viewModel.loadScanList()
-    }
-
-    private fun observeLiveData() {
-        viewModel.getScanList().observe(this){
-            scanList = it
-            Log.d("BARCODE", "observeLiveData: ${scanList[0].qrCode}")
-        }
-    }*/
 
     private var barcodeCallback: BarcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
@@ -132,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         binding.barcodeScanner.pause()
     }
 
-    fun getCurrentTime(): String {
+    private fun getCurrentTime(): String {
         val currentTime = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("hh:mm a, dd MMMM yyyy", Locale.getDefault())
         return dateFormat.format(Date(currentTime))

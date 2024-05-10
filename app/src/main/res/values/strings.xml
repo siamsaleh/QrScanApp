@@ -2,4 +2,9 @@
     <string name="app_name">QrScanApi</string>
     <string name="show_scanned_list_text">Show Scanned List</string>
     <string name="scan_code_text">Scan Code</string>
+    <string name="scanned_code_list_text">Scanned Code List</string>
+    <string name="if_the_scanned_code_list_is_empty_please_scan_qrcode_or_barcode_first_text">If the Scanned Code List is empty. Please Scan Qrcode or Barcode first.</string>
+    <string name="scan_instruction">Note:\n\nScan Code Button: This button enables QR/BAR code scanning. Once scanned, press the UPLOAD button to upload the code to the server.\nAfter uploading, click the Show Scanned List Button to view all the uploaded QR/BAR codes.\n\nImportant:\n\nI am utilizing a Render-free server for the API. Please be aware that the initial attempt might take a bit longer due to server initialization.</string>
+    <string name="qr_code_scaner_text">QR Code Scaner</string>
+    <!--    <string name="scan_instruction">sgdfgsdfgsdfg.</string>-->
 </resources>

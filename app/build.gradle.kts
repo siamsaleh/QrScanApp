@@ -56,4 +56,6 @@ dependencies {
     // Qr/Bar Code Scanner
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
+    // Facebook Shimmer
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 }
